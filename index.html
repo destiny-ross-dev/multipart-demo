@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+  </head>
+  <body>
+    <form
+      id="myForm"
+      action="/server"
+      method="POST"
+      enctype="multipart/form-data"
+    >
+      First name: <input type="text" name="firstname" /><br />
+      Last name: <input type="text" name="lastname" /><br /><br />
+      <input type="button" onclick="submitForm()" value="Submit form" />
+      <h1 id="display"></h1>
+    </form>
+    <div></div>
+
+    <script>
+      function submitForm() {
+        const formData = new FormData();
+        const firstName = document.querySelector('input[name="firstname"]');
+        const lastName = document.querySelector('input[name="lastname"]');
+
+        formData.append("firstName", firstName.value);
+        formData.append("lastName", lastName.value);
+
+        console.log(formData);
+
+        fetch("http://localhost:5002/test", {
+          method: "POST",
+          body: formData,
+          mode: "cors",
+        })
+          .then((response) => response.json())
+          .then((result) => {
+            console.log("Success:", result);
+            document.getElementById(
+              "display"
+            ).innerHTML = `Hello ${result.firstName} ${result.lastName}`;
+          })
+          .catch((error) => {
+            console.error("Error:", error);
+          });
+      }
+    </script>
+  </body>
+</html>
